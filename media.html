@@ -1,0 +1,1749 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0b12">
+
+    <title>MediaSpace — Discover Something New</title>
+
+    <link rel="icon" href="assets/images/WhatsApp Image 2026-10-29 at 09.31.20.jpeg">
+
+    <style>
+        /* =========================
+           1. DESIGN SYSTEM
+        ========================= */
+        :root {
+            color-scheme: dark;
+            --bg: #0b0b12;
+            --surface: #13131e;
+            --surface-2: #1b1b29;
+            --text: #f6f5ff;
+            --muted: #a3a3b8;
+            --border: rgba(255,255,255,.09);
+            --accent: #a78bfa;
+            --accent-2: #60a5fa;
+            --header: rgba(11,11,18,.78);
+            --shadow: 0 20px 60px rgba(0,0,0,.22);
+        }
+
+        body.light {
+            color-scheme: light;
+            --bg: #f7f7fc;
+            --surface: #ffffff;
+            --surface-2: #efeff8;
+            --text: #191827;
+            --muted: #68677e;
+            --border: rgba(25,24,39,.1);
+            --accent: #7554d9;
+            --accent-2: #3979d8;
+            --header: rgba(247,247,252,.86);
+            --shadow: 0 20px 60px rgba(37,30,70,.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background .3s, color .3s;
+            overflow-x: hidden;
+        }
+
+        body, button, input {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            color: inherit;
+            cursor: pointer;
+        }
+
+        button, input {
+            font-size: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        img, video, iframe {
+            max-width: 100%;
+        }
+
+        .container {
+            width: min(1160px, 90%);
+            margin-inline: auto;
+        }
+
+        .gradient-text {
+            background: linear-gradient(100deg, #c4b5fd, #60a5fa, #f0abfc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section {
+            padding: 95px 0;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(28px, 4vw, 40px);
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+            margin-top: 8px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            max-width: 440px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* =========================
+           2. NAVBAR
+        ========================= */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--header);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 850;
+            letter-spacing: -.8px;
+            white-space: nowrap;
+        }
+
+        .brand-icon {
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            box-shadow: 0 6px 24px rgba(139,92,246,.28);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 650;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            transition: transform .2s, border-color .2s;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .menu-btn {
+            display: none;
+        }
+
+        /* =========================
+           3. HERO
+        ========================= */
+        .hero {
+            position: relative;
+            min-height: 570px;
+            display: flex;
+            align-items: center;
+            padding: 90px 0 100px;
+            isolation: isolate;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 650px;
+            height: 650px;
+            right: -180px;
+            top: -190px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(139,92,246,.23),
+                rgba(59,130,246,.08) 45%,
+                transparent 70%
+            );
+            filter: blur(12px);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 420px;
+            height: 420px;
+            right: 20%;
+            bottom: -340px;
+            border-radius: 50%;
+            background: rgba(96,165,250,.12);
+            filter: blur(60px);
+        }
+
+        .hero-content {
+            max-width: 760px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 13px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 100px;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 26px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #34d399;
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(52,211,153,.6);
+        }
+
+        .hero h1 {
+            font-size: clamp(43px, 7vw, 76px);
+            letter-spacing: -4px;
+            line-height: 1.04;
+            max-width: 780px;
+            margin-bottom: 24px;
+        }
+
+        .hero-description {
+            max-width: 570px;
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--muted);
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 13px;
+        }
+
+        .btn {
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 12px 19px;
+            font-size: 13px;
+            font-weight: 750;
+            transition: transform .2s, background .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-primary {
+            color: white;
+            border: none;
+            background: linear-gradient(110deg, #8b5cf6, #4f8cf7);
+            box-shadow: 0 10px 30px rgba(99,102,241,.24);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .hero-note {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 35px;
+        }
+
+        .hero-note span {
+            color: var(--accent);
+        }
+
+        /* =========================
+           4. QUICK STATS
+        ========================= */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: -25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 23px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            font-size: 21px;
+            margin-bottom: 12px;
+        }
+
+        .stat-number {
+            font-size: 26px;
+            font-weight: 850;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        /* =========================
+           5. EXPLORE TOOLBAR
+        ========================= */
+        .explore-section {
+            padding-top: 100px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 230px;
+            max-width: 390px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 15px;
+            min-height: 49px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface);
+        }
+
+        .search-box span {
+            color: var(--muted);
+            font-size: 19px;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            min-height: 42px;
+            padding: 9px 15px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            transition: all .2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: white;
+            border-color: transparent;
+            background: linear-gradient(110deg, #8b5cf6, #4f8cf7);
+        }
+
+        .results-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .text-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        /* =========================
+           6. MEDIA CARDS
+        ========================= */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .media-card {
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 19px;
+            background: var(--surface);
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+
+        .media-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(167,139,250,.5);
+            box-shadow: var(--shadow);
+        }
+
+        .media-card.hidden {
+            display: none;
+        }
+
+        .media-visual {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: var(--surface-2);
+        }
+
+        .media-visual > img,
+        .media-visual > video,
+        .media-visual > iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 0;
+        }
+
+        .media-visual > img {
+            transition: transform .55s;
+        }
+
+        .media-card:hover .media-visual > img {
+            transform: scale(1.045);
+        }
+
+        .media-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 2;
+            padding: 6px 10px;
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 8px;
+            background: rgba(10,10,20,.72);
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .favorite-btn {
+            position: absolute;
+            z-index: 3;
+            top: 12px;
+            right: 12px;
+            width: 37px;
+            height: 37px;
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 11px;
+            background: rgba(10,10,20,.72);
+            color: white;
+            font-size: 19px;
+            display: grid;
+            place-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .favorite-btn.active {
+            color: #fb7185;
+        }
+
+        .media-body {
+            padding: 21px;
+        }
+
+        .media-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+        }
+
+        .media-body h3 {
+            font-size: 21px;
+            letter-spacing: -.5px;
+            margin: 9px 0 7px;
+        }
+
+        .media-body > p {
+            color: var(--muted);
+            font-size: 13px;
+            min-height: 42px;
+        }
+
+        .media-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .media-type {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .open-btn {
+            border: none;
+            background: none;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .open-btn:hover {
+            color: var(--accent-2);
+        }
+
+        .audio-art {
+            height: 100%;
+            display: grid;
+            place-items: center;
+            position: relative;
+            background:
+                radial-gradient(circle at 25% 25%, rgba(168,85,247,.6), transparent 40%),
+                radial-gradient(circle at 80% 75%, rgba(59,130,246,.6), transparent 45%),
+                #17152a;
+        }
+
+        .audio-disc {
+            width: 118px;
+            height: 118px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.2);
+            background: repeating-radial-gradient(
+                circle,
+                #25233c 0 4px,
+                #35304e 5px 7px
+            );
+            display: grid;
+            place-items: center;
+            box-shadow: 0 12px 45px rgba(0,0,0,.3);
+        }
+
+        .audio-disc::after {
+            content: "♫";
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #c4b5fd, #60a5fa);
+            color: #17152a;
+            font-size: 22px;
+        }
+
+        .video-placeholder {
+            height: 100%;
+            display: grid;
+            place-items: center;
+            color: white;
+            background:
+                radial-gradient(circle at 75% 25%, rgba(96,165,250,.4), transparent 35%),
+                linear-gradient(135deg, #1e1b4b, #111827);
+        }
+
+        .play-symbol {
+            width: 62px;
+            height: 62px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.4);
+            background: rgba(255,255,255,.12);
+            font-size: 23px;
+            padding-left: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            border: 1px dashed var(--border);
+            border-radius: 18px;
+            color: var(--muted);
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-state strong {
+            display: block;
+            color: var(--text);
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        /* =========================
+           7. ABOUT / CTA
+        ========================= */
+        .about-card {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(28px, 5vw, 52px);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(139,92,246,.22), transparent 40%),
+                var(--surface);
+        }
+
+        .about-card h2 {
+            font-size: clamp(28px, 4vw, 39px);
+            letter-spacing: -1.5px;
+            max-width: 650px;
+            line-height: 1.2;
+            margin: 12px 0;
+        }
+
+        .about-card p {
+            max-width: 620px;
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 23px;
+        }
+
+        /* =========================
+           8. FOOTER
+        ========================= */
+        footer {
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .footer-inner p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* =========================
+           9. TOAST & BACK TO TOP
+        ========================= */
+        .toast {
+            position: fixed;
+            z-index: 300;
+            bottom: 25px;
+            left: 50%;
+            transform: translate(-50%, 20px);
+            max-width: calc(100% - 32px);
+            padding: 13px 20px;
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s, transform .25s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .back-top {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 80;
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: var(--shadow);
+            font-size: 19px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all .2s;
+        }
+
+        .back-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* =========================
+           10. SCROLL REVEAL
+        ========================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity .65s ease, transform .65s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation: none !important;
+                transition-duration: .01ms !important;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* =========================
+           11. RESPONSIVE
+        ========================= */
+        @media (max-width: 850px) {
+            .nav-links {
+                gap: 17px;
+            }
+
+            .hero {
+                min-height: 500px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                width: 90%;
+            }
+
+            .nav-inner {
+                min-height: 68px;
+                flex-wrap: wrap;
+                padding: 12px 0;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .nav-actions {
+                margin-left: auto;
+            }
+
+            .menu-btn {
+                display: grid;
+            }
+
+            .nav-links {
+                display: none;
+                order: 3;
+                width: 100%;
+                padding: 12px 0 5px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 12px 4px;
+                border-top: 1px solid var(--border);
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 75px 0 85px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2.5px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .section {
+                padding: 70px 0;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+
+            .stat-number {
+                font-size: 23px;
+            }
+
+            .explore-section {
+                padding-top: 75px;
+            }
+
+            .toolbar {
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: none;
+            }
+
+            .filters {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 4px;
+            }
+
+            .filter-btn {
+                white-space: nowrap;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+                gap: 17px;
+            }
+
+            .media-body > p {
+                min-height: 0;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-inner">
+
+            <a href="#home" class="brand">
+                <span class="brand-icon">✦</span>
+                Media<span class="gradient-text">Space.</span>
+            </a>
+
+            <nav class="nav-links" id="navLinks" aria-label="Menu utama">
+                <a href="#home" class="active">Home</a>
+                <a href="#explore">Explore</a>
+                <a href="#about">About</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="icon-btn" id="themeToggle"
+                    aria-label="Ganti tema" title="Ganti tema">☀</button>
+
+                <button class="icon-btn menu-btn" id="menuToggle"
+                    aria-label="Buka menu" aria-expanded="false"
+                    aria-controls="navLinks">☰</button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main id="home">
+
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content reveal">
+
+                    <div class="status-pill">
+                        <span class="status-dot"></span>
+                        YOUR CREATIVE MEDIA SPACE
+                    </div>
+
+                    <h1>
+                        Discover a world<br>
+                        of <span class="gradient-text">digital media.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        One space, endless possibilities.
+                        Explore visuals, sounds, and videos
+                        in a digital experience designed to
+                        keep things simple, beautiful, and fun.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="#explore" class="btn btn-primary">
+                            Explore Media <span>↗</span>
+                        </a>
+
+                        <a href="#about" class="btn btn-secondary">
+                            About This Project
+                        </a>
+                    </div>
+
+                    <div class="hero-note">
+                        <span>✦</span>
+                        Made for curious minds and creative people.
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK STATS -->
+        <section class="container stats reveal"
+            aria-label="Ringkasan media">
+
+            <div class="stat-card">
+                <div class="stat-icon">▧</div>
+                <div class="stat-number">01</div>
+                <div class="stat-label">Visual Gallery</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">♫</div>
+                <div class="stat-number">01</div>
+                <div class="stat-label">Audio Experience</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">▷</div>
+                <div class="stat-number">02</div>
+                <div class="stat-label">Video Players</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✧</div>
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Ways to Explore</div>
+            </div>
+
+        </section>
+
+        <!-- EXPLORE -->
+        <section class="section explore-section" id="explore">
+            <div class="container">
+
+                <div class="section-heading reveal">
+                    <div>
+                        <span class="eyebrow">THE COLLECTION</span>
+                        <h2>Explore the <span class="gradient-text">space.</span></h2>
+                        <p>
+                            Temukan konten yang ingin lu lihat.
+                            Cari, filter, atau simpan favorit lu.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SEARCH -->
+                <div class="toolbar reveal">
+                    <label class="search-box">
+                        <span>⌕</span>
+                        <input type="search" id="searchInput"
+                            placeholder="Cari gambar, audio, video..."
+                            aria-label="Cari media">
+                    </label>
+
+                    <!-- FILTER -->
+                    <div class="filters" aria-label="Filter media">
+                        <button class="filter-btn active"
+                            data-filter="all" aria-pressed="true">All Media</button>
+
+                        <button class="filter-btn"
+                            data-filter="image" aria-pressed="false">Images</button>
+
+                        <button class="filter-btn"
+                            data-filter="audio" aria-pressed="false">Audio</button>
+
+                        <button class="filter-btn"
+                            data-filter="video" aria-pressed="false">Videos</button>
+
+                        <button class="filter-btn"
+                            data-filter="favorite" aria-pressed="false">♥ Favorites</button>
+                    </div>
+                </div>
+
+                <div class="results-line">
+                    <span id="resultCount" aria-live="polite">4 media ditemukan</span>
+                    <button class="text-btn" id="resetFilters">Reset filter ↺</button>
+                </div>
+
+                <!-- MEDIA GRID -->
+                <div class="media-grid" id="mediaGrid">
+
+                    <!-- IMAGE CARD -->
+                    <article class="media-card reveal"
+                        data-category="image"
+                        data-search="gambar pemandangan alam nature landscape photo image">
+
+                        <div class="media-visual">
+                            <span class="media-badge">IMAGE</span>
+
+                            <button class="favorite-btn"
+                                data-favorite="image"
+                                aria-label="Tambahkan gambar ke favorit"
+                                aria-pressed="false">♡</button>
+
+                            <img
+                                src="assets/images/Gemini_Generated_Image_czvzlmczvzlmczvz.jpg"
+                                alt="Pemandangan alam"
+                                loading="lazy">
+                        </div>
+
+                        <div class="media-body">
+                            <div class="media-meta">✦ Visual collection</div>
+                            <h3>Beautiful Scenery</h3>
+                            <p>
+                                A little escape into the beauty of nature.
+                                Nikmati gambar pemandangan dalam galeri ini.
+                            </p>
+
+                            <div class="media-footer">
+                                <span class="media-type">JPG · Image</span>
+                                <button class="open-btn"
+                                    data-open="image">View image ↗</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- AUDIO CARD -->
+                    <article class="media-card reveal"
+                        data-category="audio"
+                        data-search="audio musik music sound lagu mp3">
+
+                        <div class="media-visual">
+                            <span class="media-badge">AUDIO</span>
+
+                            <button class="favorite-btn"
+                                data-favorite="audio"
+                                aria-label="Tambahkan audio ke favorit"
+                                aria-pressed="false">♡</button>
+
+                            <div class="audio-art">
+                                <div class="audio-disc"></div>
+                            </div>
+                        </div>
+
+                        <div class="media-body">
+                            <div class="media-meta">♫ Sound collection</div>
+                            <h3>Audio Experience</h3>
+                            <p>
+                                Putar audio favorit dan nikmati pengalaman
+                                mendengarkan langsung di website.
+                            </p>
+
+                            <audio controls preload="metadata"
+                                style="width:100%; margin-top:16px;">
+                                <source
+                                    src="assets/audio/ssstik.io_1793236993660.mp3"
+                                    type="audio/mpeg">
+                                Browser tidak mendukung audio HTML.
+                            </audio>
+
+                            <div class="media-footer">
+                                <span class="media-type">MP3 · Audio</span>
+                                <button class="open-btn"
+                                    data-open="audio">Open player ↗</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- LOCAL VIDEO CARD -->
+                    <article class="media-card reveal"
+                        data-category="video"
+                        data-search="video lokal local movie clip mp4">
+
+                        <div class="media-visual">
+                            <span class="media-badge">VIDEO</span>
+
+                            <button class="favorite-btn"
+                                data-favorite="video"
+                                aria-label="Tambahkan video ke favorit"
+                                aria-pressed="false">♡</button>
+
+                            <video controls preload="metadata"
+                                aria-label="Video lokal">
+                                <source
+                                    src="assets/video/ssstik.io_1793236962585.mp4"
+                                    type="video/mp4">
+                                Browser tidak mendukung video HTML.
+                            </video>
+                        </div>
+
+                        <div class="media-body">
+                            <div class="media-meta">▶ Video collection</div>
+                            <h3>Motion & Moments</h3>
+                            <p>
+                                Putar video lokal dengan kontrol bawaan
+                                browser dalam tampilan yang responsif.
+                            </p>
+
+                            <div class="media-footer">
+                                <span class="media-type">MP4 · Video</span>
+                                <button class="open-btn"
+                                    data-open="video">Open video ↗</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- YOUTUBE CARD -->
+                    <article class="media-card reveal"
+                        data-category="video"
+                        data-search="youtube video streaming embed online">
+
+                        <div class="media-visual">
+                            <span class="media-badge">YOUTUBE</span>
+
+                            <button class="favorite-btn"
+                                data-favorite="youtube"
+                                aria-label="Tambahkan YouTube ke favorit"
+                                aria-pressed="false">♡</button>
+
+                            <div class="video-placeholder">
+                                <div class="play-symbol">▶</div>
+                            </div>
+                        </div>
+
+                        <div class="media-body">
+                            <div class="media-meta">▶ Online collection</div>
+                            <h3>Watch on YouTube</h3>
+                            <p>
+                                Nikmati konten YouTube melalui pemutar
+                                yang terintegrasi dengan website.
+                            </p>
+
+                            <div class="media-footer">
+                                <span class="media-type">YouTube · Embed</span>
+                                <button class="open-btn"
+                                    data-open="youtube">Watch video ↗</button>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <div class="empty-state" id="emptyState">
+                    <strong>No media found ✦</strong>
+                    Coba kata kunci lain atau ubah filter lu.
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="section" id="about">
+            <div class="container">
+                <div class="about-card reveal">
+                    <span class="eyebrow">BEYOND THE SCREEN</span>
+
+                    <h2>
+                        Simple by design.<br>
+                        <span class="gradient-text">Creative by nature.</span>
+                    </h2>
+
+                    <p>
+                        MediaSpace adalah eksplorasi kecil tentang
+                        bagaimana gambar, audio, dan video dapat
+                        disajikan dalam satu pengalaman digital.
+                        Dibangun dengan HTML, CSS, dan JavaScript.
+                    </p>
+
+                    <a href="#explore" class="btn btn-primary">
+                        Explore again ↑
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-inner">
+            <a href="#home" class="brand">
+                <span class="brand-icon">✦</span>
+                Media<span class="gradient-text">Space.</span>
+            </a>
+
+            <p>© 2026 MediaSpace. Crafted with curiosity.</p>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#explore">Explore</a>
+                <a href="#about">About</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-top" id="backTop"
+        aria-label="Kembali ke atas" title="Kembali ke atas">↑</button>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast" role="status"
+        aria-live="polite"></div>
+
+    <script>
+        /* =========================
+           1. ELEMENTS
+        ========================= */
+        const body = document.body;
+        const themeToggle = document.getElementById("themeToggle");
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+        const searchInput = document.getElementById("searchInput");
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const cards = [...document.querySelectorAll(".media-card")];
+        const resultCount = document.getElementById("resultCount");
+        const emptyState = document.getElementById("emptyState");
+        const resetFilters = document.getElementById("resetFilters");
+        const backTop = document.getElementById("backTop");
+        const toast = document.getElementById("toast");
+
+        let activeFilter = "all";
+        let toastTimer;
+
+        /* =========================
+           2. SAFE LOCAL STORAGE
+        ========================= */
+        function readStorage(key, fallback) {
+            try {
+                const value = localStorage.getItem(key);
+                return value === null ? fallback : value;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function writeStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch {
+                // Website tetap berjalan jika storage tidak tersedia.
+            }
+        }
+
+        function readFavorites() {
+            try {
+                const data = JSON.parse(
+                    readStorage("mediaspace-favorites", "[]")
+                );
+
+                return Array.isArray(data) ? data : [];
+            } catch {
+                return [];
+            }
+        }
+
+        let favorites = readFavorites();
+
+        /* =========================
+           3. TOAST MESSAGE
+        ========================= */
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2400);
+        }
+
+        /* =========================
+           4. DARK / LIGHT MODE
+        ========================= */
+        function applyTheme(theme) {
+            body.classList.toggle("light", theme === "light");
+
+            themeToggle.textContent =
+                theme === "light" ? "☾" : "☀";
+
+            themeToggle.title =
+                theme === "light" ? "Aktifkan dark mode" : "Aktifkan light mode";
+
+            themeToggle.setAttribute(
+                "aria-label",
+                theme === "light" ? "Aktifkan dark mode" : "Aktifkan light mode"
+            );
+
+            const metaTheme = document.querySelector(
+                'meta[name="theme-color"]'
+            );
+
+            metaTheme.content = theme === "light" ? "#f7f7fc" : "#0b0b12";
+        }
+
+        const savedTheme = readStorage("mediaspace-theme", "dark");
+        applyTheme(savedTheme);
+
+        themeToggle.addEventListener("click", () => {
+            const nextTheme = body.classList.contains("light")
+                ? "dark"
+                : "light";
+
+            applyTheme(nextTheme);
+            writeStorage("mediaspace-theme", nextTheme);
+        });
+
+        /* =========================
+           5. MOBILE MENU
+        ========================= */
+        menuToggle.addEventListener("click", () => {
+            const isOpen = navLinks.classList.toggle("open");
+
+            menuToggle.textContent = isOpen ? "✕" : "☰";
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        navLinks.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("open");
+                menuToggle.textContent = "☰";
+                menuToggle.setAttribute("aria-expanded", "false");
+            });
+        });
+
+        /* =========================
+           6. FAVORITES
+        ========================= */
+        function updateFavoriteButtons() {
+            document.querySelectorAll("[data-favorite]").forEach(button => {
+                const id = button.dataset.favorite;
+                const isFavorite = favorites.includes(id);
+
+                button.classList.toggle("active", isFavorite);
+                button.textContent = isFavorite ? "♥" : "♡";
+                button.setAttribute("aria-pressed", String(isFavorite));
+
+                button.setAttribute(
+                    "aria-label",
+                    isFavorite
+                        ? "Hapus dari favorit"
+                        : "Tambahkan ke favorit"
+                );
+            });
+        }
+
+        document.querySelectorAll("[data-favorite]").forEach(button => {
+            button.addEventListener("click", () => {
+                const id = button.dataset.favorite;
+
+                if (favorites.includes(id)) {
+                    favorites = favorites.filter(item => item !== id);
+                    showToast("Dihapus dari favorit");
+                } else {
+                    favorites.push(id);
+                    showToast("Ditambahkan ke favorit ♥");
+                }
+
+                writeStorage(
+                    "mediaspace-favorites",
+                    JSON.stringify(favorites)
+                );
+
+                updateFavoriteButtons();
+                filterMedia();
+            });
+        });
+
+        /* =========================
+           7. SEARCH & FILTER
+        ========================= */
+        function filterMedia() {
+            const query = searchInput.value.trim().toLowerCase();
+            let visible = 0;
+
+            cards.forEach(card => {
+                const category = card.dataset.category;
+                const searchData = (
+                    card.dataset.search + " " + card.textContent
+                ).toLowerCase();
+
+                const matchesSearch = searchData.includes(query);
+
+                const matchesFilter =
+                    activeFilter === "all" ||
+                    (activeFilter === "favorite"
+                        ? favorites.includes(card.querySelector(
+                            "[data-favorite]"
+                        ).dataset.favorite)
+                        : activeFilter === "video"
+                            ? category === "video"
+                            : category === activeFilter);
+
+                const show = matchesSearch && matchesFilter;
+
+                card.classList.toggle("hidden", !show);
+
+                if (show) visible++;
+            });
+
+            resultCount.textContent =
+                visible + (visible === 1
+                    ? " media ditemukan"
+                    : " media ditemukan");
+
+            emptyState.classList.toggle("show", visible === 0);
+        }
+
+        searchInput.addEventListener("input", filterMedia);
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                activeFilter = button.dataset.filter;
+
+                filterButtons.forEach(item => {
+                    const isActive = item === button;
+
+                    item.classList.toggle("active", isActive);
+                    item.setAttribute("aria-pressed", String(isActive));
+                });
+
+                filterMedia();
+            });
+        });
+
+        resetFilters.addEventListener("click", () => {
+            searchInput.value = "";
+            activeFilter = "all";
+
+            filterButtons.forEach(button => {
+                const isActive = button.dataset.filter === "all";
+
+                button.classList.toggle("active", isActive);
+                button.setAttribute("aria-pressed", String(isActive));
+            });
+
+            filterMedia();
+            showToast("Filter berhasil direset");
+        });
+
+        /* =========================
+           8. OPEN MEDIA
+        ========================= */
+        function openMedia(type) {
+            if (type === "image") {
+                const image = document.querySelector(
+                    '.media-card[data-category="image"] img'
+                );
+
+                if (!image || !image.complete || !image.naturalWidth) {
+                    showToast("Gambar belum tersedia. Periksa file gambar.");
+                    return;
+                }
+
+                const preview = window.open("", "_blank");
+
+                if (!preview) {
+                    showToast("Izinkan pop-up untuk membuka gambar.");
+                    return;
+                }
+
+                preview.document.title = "MediaSpace — Image Preview";
+                preview.document.body.style.cssText =
+                    "margin:0;min-height:100vh;display:grid;place-items:center;" +
+                    "background:#0b0b12;padding:20px;box-sizing:border-box;";
+
+                const img = preview.document.createElement("img");
+                img.src = image.src;
+                img.alt = image.alt;
+                img.style.cssText =
+                    "max-width:100%;max-height:95vh;object-fit:contain;";
+
+                preview.document.body.appendChild(img);
+                return;
+            }
+
+            if (type === "audio") {
+                const audio = document.querySelector(
+                    '.media-card[data-category="audio"] audio'
+                );
+
+                audio.scrollIntoView({ behavior: "smooth", block: "center" });
+                audio.focus({ preventScroll: true });
+                showToast("Gunakan kontrol audio untuk memutar musik");
+                return;
+            }
+
+            if (type === "video") {
+                const video = document.querySelector(
+                    '.media-card[data-category="video"] video'
+                );
+
+                video.scrollIntoView({ behavior: "smooth", block: "center" });
+                video.focus({ preventScroll: true });
+
+                video.play().catch(() => {
+                    showToast("Tekan tombol play pada video untuk memulai");
+                });
+
+                return;
+            }
+
+            if (type === "youtube") {
+                const youtubeUrl =
+                    "https://www.youtube.com/embed/hzdvzb3Nmi0";
+
+                const player = document.createElement("iframe");
+                player.src = youtubeUrl;
+                player.title = "YouTube video player";
+                player.allow =
+                    "accelerometer; autoplay; clipboard-write; encrypted-media; " +
+                    "gyroscope; picture-in-picture; web-share";
+                player.allowFullscreen = true;
+                player.style.cssText =
+                    "width:100%;aspect-ratio:16/9;border:0;border-radius:14px;";
+
+                const holder = document.createElement("div");
+                holder.style.cssText =
+                    "position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.9);" +
+                    "display:grid;place-items:center;padding:20px;";
+
+                const content = document.createElement("div");
+                content.style.cssText = "width:min(900px,100%);";
+
+                const close = document.createElement("button");
+                close.textContent = "✕  Close";
+                close.setAttribute("aria-label", "Tutup video");
+                close.style.cssText =
+                    "display:block;margin:0 0 12px auto;padding:10px 15px;" +
+                    "border:1px solid #444;border-radius:10px;" +
+                    "background:#191927;color:white;cursor:pointer;";
+
+                function closePlayer() {
+                    holder.remove();
+                    document.removeEventListener("keydown", onEscape);
+                }
+
+                function onEscape(event) {
+                    if (event.key === "Escape") closePlayer();
+                }
+
+                close.addEventListener("click", closePlayer);
+                holder.addEventListener("click", event => {
+                    if (event.target === holder) closePlayer();
+                });
+
+                document.addEventListener("keydown", onEscape);
+
+                content.append(close, player);
+                holder.appendChild(content);
+                document.body.appendChild(holder);
+            }
+        }
+
+        document.querySelectorAll("[data-open]").forEach(button => {
+            button.addEventListener("click", () => {
+                openMedia(button.dataset.open);
+            });
+        });
+
+        /* =========================
+           9. BACK TO TOP
+        ========================= */
+        window.addEventListener("scroll", () => {
+            backTop.classList.toggle("show", window.scrollY > 450);
+        }, { passive: true });
+
+        backTop.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        /* =========================
+           10. SCROLL REVEAL
+        ========================= */
+        const revealItems = document.querySelectorAll(".reveal");
+
+        if ("IntersectionObserver" in window) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            revealItems.forEach(item => observer.observe(item));
+        } else {
+            revealItems.forEach(item => item.classList.add("visible"));
+        }
+
+        /* =========================
+           11. INITIALIZE
+        ========================= */
+        updateFavoriteButtons();
+        filterMedia();
+    </script>
+
+</body>
+</html>
